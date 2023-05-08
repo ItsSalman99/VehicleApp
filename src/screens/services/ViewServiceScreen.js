@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 // import moment from "moment";
 import axios from 'axios';
 import AppointModal from '../../components/appointments/AppointModal';
-import { BASE_URL } from '../../functions';
+import { BASE_URL, getUser } from '../../functions';
 
 
 const ViewServiceScreen = ({ route, navigation }) => {
@@ -12,42 +12,25 @@ const ViewServiceScreen = ({ route, navigation }) => {
     const { sid, name, img, price, sdate, edate, stime, etime, description } = route.params;
 
     const [id, setID] = useState('');
-
+    const [user, setUser] = useState([]);
 
     const [modalVisible, setModalVisible] = useState(false);
-
-    const getData = async () => {
-        // try {
-        //     const value = await AsyncStorage.getItem('userId');
-        //     console.log(value);
-        //     console.log(sid);
-        //     if (value !== null) {
-        //         setID(value);
-        //     }
-        //     console.log(value);
-        // } catch (e) {
-        //     // error reading value
-        // }
-    }
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
-        return () => {
-
-            getData();
-
+        const check = async () => {
+            const user = await getUser();
+            setUser(user)
         }
-    }, [100]);
-
-
-    getData();
+        check();
+    }, [10])
 
     const Appoint = () => {
+        setLoading(true);
         console.log(sid);
         console.log(name);
-        console.log(id);
 
-
-        const URL = BASE_URL+"api/service/appoint/" + id;
+        const URL = BASE_URL + "api/service/appoint/" + user.id;
         console.log(URL);
         axios({
             method: 'post',
@@ -60,6 +43,7 @@ const ViewServiceScreen = ({ route, navigation }) => {
             console.log(res.data.status);
             console.log(res.data.data);
             if (res.data.status == true) {
+                ToastAndroid.show('Logged in successfull!', ToastAndroid.SHORT)
                 Alert.alert(
                     "Service has been booked successfully",
                     res.data.message,
@@ -73,56 +57,65 @@ const ViewServiceScreen = ({ route, navigation }) => {
                     ]
                 );
             }
-        })
+            else {
+                ToastAndroid.show(res.data.message, ToastAndroid.SHORT)
 
+            }
+            setLoading(false);
+        }).catch((e) => {
+            console.log(e);
+        })
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.container1}>
-                <Text style={styles.h1}>
-                    {name}
-                </Text>
-            </View>
-            <View style={styles.container2}>
-                <TouchableOpacity style={styles.box}>
-                    <View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ backgroundColor: 'dodgerblue', color: '#fff', borderRadius: 10, textAlign: 'center', width: 120, fontSize: 12, padding: 3 }}>
-                                From: {sdate}
+        (isLoading == true) ? <View style={styles.loading}>
+            <ActivityIndicator size="large" />
+        </View> :
+            <ScrollView style={styles.container}>
+                <View style={styles.container1}>
+                    <Text style={styles.h1}>
+                        {name}
+                    </Text>
+                </View>
+                <View style={styles.container2}>
+                    <TouchableOpacity style={styles.box}>
+                        <View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={{ backgroundColor: 'dodgerblue', color: '#fff', borderRadius: 10, textAlign: 'center', width: 120, fontSize: 12, padding: 3 }}>
+                                    From: {sdate}
+                                </Text>
+                                <Text style={{ backgroundColor: 'dodgerblue', color: '#fff', borderRadius: 10, textAlign: 'center', width: 120, fontSize: 12, padding: 3 }}>
+                                    To: {edate}
+                                </Text>
+                            </View>
+                            <Image source={{ uri: BASE_URL + img }} style={{ width: '100%', height: 150, resizeMode: 'center', marginTop: 10 }} />
+                            <Text style={styles.boxH1}>
+                                {name}
                             </Text>
-                            <Text style={{ backgroundColor: 'dodgerblue', color: '#fff', borderRadius: 10, textAlign: 'center', width: 120, fontSize: 12, padding: 3 }}>
-                                To: {edate}
+                            <Text style={{ color: '#000' }}>Rs. {price}</Text>
+                            <Text style={{ color: '#000', marginVertical: 10 }}>
+                                {description}
                             </Text>
+                            <Text style={{ color: '#000', marginVertical: 10 }}>
+                                Time: {stime} - {etime}
+                            </Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        Appoint()
+                                    }}
+                                    style={styles.btn}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <AntDesign name="checkcircleo" color={'#fff'} size={20} />
+                                        <Text style={styles.btnTxt}>Appoint</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                        <Image source={{ uri: BASE_URL + img }} style={{ width: '100%', height: 150, resizeMode: 'center', marginTop: 10 }} />
-                        <Text style={styles.boxH1}>
-                            {name}
-                        </Text>
-                        <Text style={{color: '#000'}}>Rs. {price}</Text>
-                        <Text style={{ color: '#000', marginVertical: 10 }}>
-                            {description}
-                        </Text>
-                        <Text style={{ color: '#000', marginVertical: 10 }}>
-                            Time: {stime} - {etime}
-                        </Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    Appoint()
-                                }}
-                                style={styles.btn}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <AntDesign name="checkcircleo" color={'#fff'} size={20} />
-                                    <Text style={styles.btnTxt}>Appoint</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            </View>
+                    </TouchableOpacity>
+                </View>
 
-        </ScrollView>
+            </ScrollView>
     );
 }
 

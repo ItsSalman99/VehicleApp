@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const BASE_URL = "http://192.168.0.105:8000/";
+export const BASE_URL = "http://192.168.0.112:8000/";
 
 export const storeLogin = async (user, isLoggedIn) => {
     try {

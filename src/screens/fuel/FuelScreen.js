@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RefreshControl } from 'react-native';
+import { BASE_URL } from '../../functions';
 
 const FuelScreen = ({ navigation }) => {
 
@@ -8,7 +9,7 @@ const FuelScreen = ({ navigation }) => {
     const [data, setData] = useState([]);
 
     const getData = () => {
-        fetch('http://172.15.2.113:8000/api/fuel/getAll')
+        fetch(BASE_URL+'api/fuel/getAll')
             .then((response) => response.json())
             .then((json) => setData(json.fuels))
             .catch((error) => console.error(error))

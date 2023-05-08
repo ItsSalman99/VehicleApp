@@ -18,7 +18,7 @@ const DashBoardScreen = ({ navigation }) => {
         setIsRefreshing(true);
         await handleFetchPalettes();
         setIsRefreshing(false);
-    }, []);
+    }, [10]);
 
     const maxlimit = 14;
 

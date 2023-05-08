@@ -9,23 +9,20 @@ const ShopScreen = ({ navigation }) => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
-    const getData = async () => {
-        try {
-            let response = await fetch(
-                BASE_URL+'api/products'
-            );
-            let json = await response.json();
-            setData(json.data);
-            setLoading(false);
-        } catch (error) {
-            console.error(error);
-        }
+    const getData = () => {
+        fetch(BASE_URL+'api/products')
+            .then((response) => response.json())
+            .then((json) => {
+                setData(json.data);
+            })
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
        
     }
 
     useEffect(() => {
         getData()
-    }, [100]);
+    }, [10]);
 
     const onRefresh = () => {
         //Clear old data of the list

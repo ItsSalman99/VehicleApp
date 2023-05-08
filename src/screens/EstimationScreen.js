@@ -3,6 +3,7 @@ import { Text, View, ScrollView, useWindowDimensions, TextInput, TouchableOpacit
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { useNavigation } from '@react-navigation/native';
+import { BASE_URL } from '../functions';
 
 const EstimationScreen = () => {
     //VEHICLE
@@ -23,27 +24,27 @@ const EstimationScreen = () => {
 
 
     const getData = () => {
-        fetch('http://172.15.2.113:8000/api/vehicles/models/getAll')
+        fetch(BASE_URL+'api/vehicles/models/getAll')
             .then((response) => response.json())
             .then((json) => {
                 setModels(json.models);
-                console.log(model);
+                console.log(models);
             })
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
-        fetch('http://172.15.2.113:8000/api/vehicles/getAll')
+        fetch(BASE_URL+'api/vehicles/getAll')
             .then((response) => response.json())
             .then((json) => {
                 setVehicles(json.vehicles);
-                console.log(vehicle);
+                console.log(vehicles);
             })
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
-        fetch('http://172.15.2.113:8000/api/vehicles/issues/getAll')
+        fetch(BASE_URL+'api/vehicles/issues/getAll')
             .then((response) => response.json())
             .then((json) => {
                 setIssues(json.issues);
-                // console.log(vehicle);
+                console.log(issues);
             })
             .catch((error) => console.error(error))
             .finally(() => setLoading(false));
@@ -66,23 +67,35 @@ const EstimationScreen = () => {
                 <ScrollView style={{ flex: 1, backgroundColor: '#fff' }} >
 
                     <View style={{ marginVertical: 20, padding: 10 }}>
-                        <View><Text style={{ marginVertical: 2 }}>Select Vehicles</Text></View>
+                        <View><Text style={{ marginVertical: 2, color: '#000' }}>Select Vehicles</Text></View>
                         <SelectList
                             setSelected={(val) => setVehicle(val)}
                             data={vehicles}
                             save="value"
+                            inputStyles={{color: '#000',}}
+                            dropdownStyles={{color: '#000'}}
+                            dropdownItemStyles={{color: '#000'}}
+                            dropdownTextStyles={{color: '#000'}}
                         />
-                        <View><Text style={{ marginVertical: 2 }}>Select Models</Text></View>
+                        <View><Text style={{ marginVertical: 2, color: '#000' }}>Select Models</Text></View>
                         <SelectList
                             setSelected={(val) => setModel(val)}
                             data={models}
                             save="value"
+                            inputStyles={{color: '#000',}}
+                            dropdownStyles={{color: '#000'}}
+                            dropdownItemStyles={{color: '#000'}}
+                            dropdownTextStyles={{color: '#000'}}
                         />
-                        <View><Text style={{ marginVertical: 2 }}>Select Issue</Text></View>
+                        <View><Text style={{ marginVertical: 2, color: '#000' }}>Select Issue</Text></View>
                         <SelectList
                             setSelected={(val) => setIssue(val)}
                             data={issues}
                             save="value"
+                            inputStyles={{color: '#000',}}
+                            dropdownStyles={{color: '#000'}}
+                            dropdownItemStyles={{color: '#000'}}
+                            dropdownTextStyles={{color: '#000'}}
                         />
                         <TouchableOpacity style={{ marginVertical: 10 }}
                             onPress={() => {

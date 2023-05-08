@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, Alert, ToastAndroid } from 'react-native';
 // import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from 'axios';
 import * as Yup from 'yup';
@@ -34,8 +34,10 @@ const RegisterScreen = ({ navigation, route }) => {
                 usertype
             }
         }).then((res) => {
-            console.log(res.data.user.token);
+            console.log(res.data.user);
             if (res.data.status == true) {
+                
+                ToastAndroid.show('Account created successfully!!', ToastAndroid.SHORT)
                 Alert.alert(
                     "Account created successfully!",
                     "Hey" + res.data.user.name + ", Login here",
@@ -48,13 +50,7 @@ const RegisterScreen = ({ navigation, route }) => {
                     type: usertype
                 });
             } else if(res.data.status == false) {
-                Alert.alert(
-                    "Opp's Something went wrong!",
-                    "Please try again",
-                    [
-                        { text: "OK", onPress: () => console.log("OK Pressed") }
-                    ]
-                );
+                ToastAndroid.show('Something went wrong!!', ToastAndroid.SHORT)
             }
         }).catch((e) => {
             console.log(e);

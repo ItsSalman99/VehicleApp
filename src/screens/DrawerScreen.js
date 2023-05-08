@@ -4,6 +4,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useStore } from 'react-redux';
 import { logout } from '../store/actions/actions';
@@ -56,6 +57,12 @@ const DrawerScreen = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ padding: 10, marginHorizontal: 20 }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('MyAppointments') }} style={{ flexDirection: 'row' }}>
+                    <MaterialIcons name="history-toggle-off" size={20} color="#fff" />
+                        <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>My Orders</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ padding: 10, marginHorizontal: 20 }}>
                     <TouchableOpacity onPress={() => { navigation.navigate('Vehicles') }} style={{ flexDirection: 'row' }}>
                         <AntDesign name="car" size={20} color="#fff" />
                         <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Vehicles</Text>
@@ -68,7 +75,7 @@ const DrawerScreen = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ padding: 10, marginHorizontal: 20 }}>
-                    <TouchableOpacity style={{ flexDirection: 'row' }} >
+                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => navigation.navigate('Rewards')}>
                         <AntDesign name="gift" size={20} color="#fff" />
                         <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Get Rewards</Text>
                     </TouchableOpacity>

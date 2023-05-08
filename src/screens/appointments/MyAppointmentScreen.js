@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { BASE_URL, getUser } from '../../functions';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyAppointmentScreen = ({ navigation }) => {
@@ -8,31 +9,23 @@ const MyAppointmentScreen = ({ navigation }) => {
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
-    const [id, setID] = useState(0);
-
-    const getData = async () => {
-        // try {
-        //     const value = await AsyncStorage.getItem('userId');
-        //     // console.log('id : '+value);
-        //     setID(value);
-        //     // console.log(value);
-        // } catch (e) {
-        //     // error reading value
-        // }
-    }
+    const [user, setUser] = useState([]);
 
     useEffect(() => {
-        getData();
+        const check = async () => {
+            const user = await getUser();
+            setUser(user)
+        }
+        check();
         getAppoint();
         // console.log(data);
-    }, []);
+    }, [10]);
 
     
     const getAppoint = () => {
-        
-        getData();
-        // console.log(id);
-        fetch('http://172.15.2.113:8000/api/user/get-appointments/' + id)
+
+        console.log(BASE_URL+'api/user/get-appointments/' + user.id);
+        fetch(BASE_URL+'api/user/get-appointments/' + user.id)
             .then((response) => response.json())
             .then((json) => {
                 setData(json.data);
@@ -66,10 +59,10 @@ const MyAppointmentScreen = ({ navigation }) => {
                 <Text style={styles.boxH1}>
                     {title}
                 </Text>
-                <Text>Rs. {price}</Text>
+                <Text style={{color: '#000'}}>Rs. {price}</Text>
             </View>
             <View>
-                <Image source={{ uri: 'http://172.15.2.113:8000/' + img }}
+                <Image source={{ uri: BASE_URL + img }}
                     style={{ width: 60, height: 60 }} />
                 {/* <AntDesign name="home" size={40} color="#000" /> */}
             </View>
@@ -125,7 +118,7 @@ const styles = StyleSheet.create({
     container2: {
         flex: 1,
         alignItems: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
     },
     h1: {
         fontSize: 30,
@@ -148,7 +141,8 @@ const styles = StyleSheet.create({
         padding: 30
     },
     boxH1: {
-        fontSize: 25
+        fontSize: 25,
+        color: '#000'
     }
 });
 

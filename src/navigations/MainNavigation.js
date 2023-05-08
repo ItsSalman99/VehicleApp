@@ -27,6 +27,7 @@ import AddPoll from '../screens/AddPoll';
 import PollDetailScreen from '../screens/PollDetailScreen';
 import SubscriptionForm from '../screens/subscription/SubscriptionForm';
 import PlaceOrder from '../screens/PlaceOrder';
+import GetReward from '../screens/rewards/GetReward';
 
 const Stack = createNativeStackNavigator();
 
@@ -197,6 +198,16 @@ const MainNavigation = () => {
                 headerStyle: {
                     backgroundColor: '#fff'
                 },
+                headerTintColor: '#000',
+                headerShadowVisible: false,
+            }} />
+            <Stack.Screen name='GetReward' component={GetReward} options={{
+                headerShown: true,
+                headerTitle: 'Reward Recieved',
+                headerStyle: {
+                    backgroundColor: '#fff'
+                },
+                headerBackVisible:false,
                 headerTintColor: '#000',
                 headerShadowVisible: false,
             }} />

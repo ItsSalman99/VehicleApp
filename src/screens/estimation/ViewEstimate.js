@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useFocusEffect } from '@react-navigation/native';
+import { BASE_URL } from '../../functions';
 
 const ViewEstimate = ({ navigation, route }) => {
 
@@ -20,7 +21,7 @@ const ViewEstimate = ({ navigation, route }) => {
     const [maxest, setMxEst] = useState(0);
 
     const getData = () => {
-        const url = 'http://172.15.2.113:8000/api/estimation/service/' + vehicle + '/' + model + '/' + service;
+        const url = BASE_URL+'api/estimation/service/' + vehicle + '/' + model + '/' + service;
         fetch(url)
             .then((response) => response.json())
             .then((json) => {
@@ -53,21 +54,21 @@ const ViewEstimate = ({ navigation, route }) => {
                             {service} Estimate
                         </Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20 }}>
-                            <Text>
-                                Min. {minest}
+                            <Text style={{color: '#000'}}> 
+                                Min. {min}
                             </Text>
-                            <Text>
-                                Max. {maxest}
+                            <Text style={{color: '#000'}}>
+                                Max. {max}
                             </Text>
                         </View>
-                        <Text>Rs. {min}   to   Rs. {max}</Text>
-                        <Text style={{ marginVertical: 5 }}>
+                        <Text style={{color: '#000'}}>Rs. {min}   to   Rs. {max}</Text>
+                        <Text style={{ marginVertical: 5, color: '#000' }}>
                             Vehicle : {vehicle}
                         </Text>
-                        <Text style={{ marginVertical: 5 }}>
+                        <Text style={{ marginVertical: 5,color: '#000' }}>
                             Model : {model}
                         </Text>
-                        <Text style={{ marginVertical: 5 }}>
+                        <Text style={{ marginVertical: 5,color: '#000' }}>
                             Service/Issue : {service}
                         </Text>
                         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
         padding: 30
     },
     boxH1: {
+        color: '#000',
         fontSize: 25
     }
 });

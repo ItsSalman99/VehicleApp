@@ -5,6 +5,7 @@ import EvilIcons from '@expo/vector-icons/EvilIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { BASE_URL } from '../functions';
 
 const LatestPolls = () => {
 
@@ -12,7 +13,7 @@ const LatestPolls = () => {
     const [isLoading ,setLoading] = useState(true);
 
     const getData = () => {
-        fetch('http://172.15.2.113:8000/api/poll/getAll')
+        fetch(BASE_URL+'api/poll/getAll')
             .then((response) => response.json())
             .then((json) => setData(json.data))
             .catch((error) => console.error(error))

@@ -1,9 +1,10 @@
 import { Formik } from 'formik';
-import React from 'react';
-import { StyleSheet, TextInput, View, Text, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TextInput, View, Text, TouchableOpacity, Alert, ActivityIndicator, ToastAndroid } from 'react-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Yup from 'yup';
+import { BASE_URL, getUser } from '../functions';
 
 
 
@@ -16,42 +17,55 @@ const AddPoll = () => {
             .required('Please enter content*'),
     });
 
+    const [user, setUser] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const check = async () => {
+            const user = await getUser();
+            setUser(user)
+            console.log(user != null);
+        }
+        check();
+    }, [10])
 
     const storePoll = async (title, content) => {
-        // const userID = await AsyncStorage.getItem('userId');
-        // var uid = parseInt(userID);
-        // console.log(title + ' ' + content + ' ' + uid);
-        // axios.post('http://172.15.2.113:8000/api/poll/store', {
-        //     title,
-        //     content,
-        //     userID
-        // }).then((res) => {
-        //     console.log(res.data);
-        //     if (res.data.status == true) {
-        //         Alert.alert(
-        //             "New Poll Created Successfully!",
-        //             "New poll has been published!",
-        //         );
-        //     } else if (res.data.status == false) {
-
-        //         Alert.alert(
-        //             "Opp's Something went wrong!",
-        //             "Please try again",
-        //         );
-        //     }
-        // }).catch((e) => {
-        //     console.log(e);
-        // });
-
+        setLoading(true);
+        var uid = user.id;
+        console.log(title + ' ' + content + ' ' + uid);
+        axios({
+            method: 'post',
+            responseType: 'json',
+            url: BASE_URL + "api/poll/store",
+            data: {
+                title,
+                content,
+                uid
+            }
+        }).then((res) => {
+            console.log(res.data);
+            if (res.data.status == true) {
+                ToastAndroid.show('New Poll Created Successfully!', ToastAndroid.SHORT)
+                setLoading(false);
+            } else if (res.data.status == false) {
+                ToastAndroid.show('Something went wrong!', ToastAndroid.SHORT)
+                setLoading(false);
+            }
+        }).catch((e) => {
+            console.log(e);
+        });
+        setLoading(false);
     }
 
-    return (
+    return ((isLoading == true) ? <View style={styles.loading}>
+        <ActivityIndicator size="large" />
+    </View> :
         <View style={styles.container}>
             <View style={{ padding: 12 }}>
-                <Text style={{ fontSize: 20 }}>
+                <Text style={{ fontSize: 20, color: '#000' }}>
                     Create a new poll
                 </Text>
-                <Text style={{ fontSize: 14, }}>
+                <Text style={{ fontSize: 14, color: '#000' }}>
                     Create a poll by sharing your thaught, knowledge or ask questions so others can give answers and
                     support your taught.
                 </Text>
@@ -71,12 +85,14 @@ const AddPoll = () => {
                             onChangeText={handleChange('title')}
                             onBlur={handleBlur('title')}
                             value={values.title}
+                            placeholderTextColor="#000"
                         />
                         {errors.content && touched.content ? <Text style={{ fontSize: 12, alignSelf: 'flex-start', marginLeft: 15, color: 'red', top: 8 }}>{errors.content}</Text> : null}
                         <TextInput style={styles.formInput2} placeholder="What is on your mind?"
                             onChangeText={handleChange('content')}
                             onBlur={handleBlur('content')}
                             value={values.content}
+                            placeholderTextColor="#000"
                             multiline={true}
                         />
                         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>

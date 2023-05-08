@@ -1,140 +1,140 @@
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from 'react-native'
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useStore } from 'react-redux';
+import { BASE_URL, getUser } from '../functions';
 
 const ProfileScreen = () => {
 
     const store = useStore();
     const [user, setUser] = useState('');
-
-    const getData = async () => {
-        if (store.getState() != undefined) {
-            if(store.getState().isLoggedIn == true)
-            {
-                setUser(store.getState().user);
-                // console.log(user);
-            }
-        }
-    }
-
-    const updateData = async (name, email) => {
-        // try {
-        //     await AsyncStorage.setItem('username', name);
-        //     await AsyncStorage.setItem('email', email);
-        // } catch (e) {
-        //     // saving error
-        //     console.log(e);
-        // }
-    }
-
-    const updateProfile = (name, email, oldpassword, password) => {
-        console.log(id);
-        // axios({
-        //     method: 'post',
-        //     responseType: 'json',
-        //     url: 'http://172.15.2.113:8000/api/profile/update/' + id,
-        //     data: {
-        //         name,
-        //         email,
-        //         oldpassword,
-        //         password
-        //     }
-        // }).then((res) => {
-        //     // console.log(res.data.status);
-        //     if (res.data.status == 500 || res.data.status == false) {
-        //         Alert.alert(
-        //             "Failed",
-        //             res.data.message,
-        //             [
-        //                 {
-        //                     text: "Cancel",
-        //                     onPress: () => console.log("Cancel Pressed"),
-        //                     style: "cancel"
-        //                 },
-        //                 { text: "OK", onPress: () => console.log("OK Pressed") }
-        //             ]
-        //         );
-        //     }
-        //     else if (res.data.status == 200) {
-        //         setName(res.data.user.name);
-        //         setEmail(res.data.user.email);
-        //         updateData(name, email);
-        //         Alert.alert(
-        //             "Profile Updated",
-        //             res.data.message,
-        //             [
-        //                 { text: "OK", onPress: () => console.log("OK Pressed") }
-        //             ]
-        //         );
-        //     }
-        // }).catch((e) => {
-        //     // error reading value
-        //     console.log(e);
-        // });
-    }
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
-        getData();
-    }, [100]);
+        const check = async () => {
+            const user = await getUser();
+            setUser(user)
+        }
+        check();
+        // console.log(data);
+    }, [10]);
+
+    const updateProfile = (name, email, oldpassword, password) => {
+        // console.log(id);
+        setLoading(true);
+        axios({
+            method: 'post',
+            responseType: 'json',
+            url: BASE_URL + 'api/profile/update/' + user.id,
+            data: {
+                name,
+                email,
+                oldpassword,
+                password
+            }
+        }).then((res) => {
+            // console.log(res.data.status);
+            if (res.data.status == 500 || res.data.status == false) {
+                setLoading(false);
+                Alert.alert(
+                    "Failed",
+                    res.data.message,
+                    [
+                        {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                        },
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+            }
+            else if (res.data.status == 200) {
+                setLoading(false);
+                setName(res.data.user.name);
+                setEmail(res.data.user.email);
+                updateData(name, email);
+                Alert.alert(
+                    "Profile Updated",
+                    res.data.message,
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+            }
+        }).catch((e) => {
+            // error reading value
+            console.log(e);
+        });
+    }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.container1}>
-                <View style={styles.header}>
-                    <View style={{ padding: 20 }}>
-                        <Text style={{ fontSize: 23, color: '#fff' }}>
-                            Welcome Back,
-                        </Text>
-                        <Text style={{ fontSize: 23, color: '#fff' }}>
-                            {user.name}!
-                        </Text>
-                    </View>
-                    <View style={{ padding: 20 }}>
-                        <Image
-                            style={{ width: 80, height: 80, resizeMode: 'stretch' }}
-                            source={require('../assets/avatar.png')}
-                        />
+        (isLoading == true) ? <View style={styles.loading}>
+            <ActivityIndicator size="large" />
+        </View> :
+            <ScrollView style={styles.container}>
+                <View style={styles.container1}>
+                    <View style={styles.header}>
+                        <View style={{ padding: 20 }}>
+                            <Text style={{ fontSize: 23, color: '#fff' }}>
+                                Welcome Back,
+                            </Text>
+                            <Text style={{ fontSize: 23, color: '#fff' }}>
+                                {user.name}!
+                            </Text>
+                        </View>
+                        <View style={{ padding: 20 }}>
+                            <Image
+                                style={{ width: 80, height: 80, resizeMode: 'stretch' }}
+                                source={require('../assets/avatar.png')}
+                            />
+                        </View>
                     </View>
                 </View>
-            </View>
-            <View style={styles.container2}>
-                <Formik
-                    enableReinitialize={true}
-                    initialValues={{ name: user.name, email: user.email, oldpassword: '', password: '' }}
-                    onSubmit={values => updateProfile(values.name, values.email, values.oldpassword, values.password)}
-                >
-                    {({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
-                        <View style={styles.form}>
-                            <TextInput onChangeText={handleChange('name')}
-                                onBlur={handleBlur('name')}
-                                value={values.name}
-                                style={styles.input} />
-                            <TextInput placeholder='email'
-                                onChangeText={handleChange('email')}
-                                onBlur={handleBlur('email')}
-                                value={values.email}
-                                style={styles.input} />
-                            <TextInput placeholder="********"
-                                onChangeText={handleChange('oldpassword')}
-                                onBlur={handleBlur('oldpassword')}
-                                value={values.oldpassword}
-                                style={styles.input} />
-                            <TextInput placeholder="********"
-                                onChangeText={handleChange('password')}
-                                onBlur={handleBlur('password')}
-                                value={values.password}
-                                style={styles.input} />
-                            <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-                                <Text style={styles.btnTxt}>Update</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                </Formik>
-            </View>
-        </ScrollView>
+                <View style={styles.container2}>
+                    <View style={{ marginHorizontal: 20, marginTop: 20 }}>
+                        <Text style={{ color: '#000' }}>
+                            To make any changes you need to enter your old password correctly!
+                        </Text>
+                    </View>
+                    <Formik
+                        enableReinitialize={true}
+                        initialValues={{ name: user.name, email: user.email, oldpassword: '', password: '' }}
+                        onSubmit={values => updateProfile(values.name, values.email, values.oldpassword, values.password)}
+                    >
+                        {({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
+                            <View style={styles.form}>
+                                <TextInput onChangeText={handleChange('name')}
+                                    onBlur={handleBlur('name')}
+                                    value={values.name}
+                                    style={styles.input} />
+                                <TextInput placeholder='email'
+                                    onChangeText={handleChange('email')}
+                                    onBlur={handleBlur('email')}
+                                    value={values.email}
+                                    style={styles.input} />
+                                <TextInput placeholder="********"
+                                    onChangeText={handleChange('oldpassword')}
+                                    onBlur={handleBlur('oldpassword')}
+                                    placeholderTextColor="#000"
+                                    value={values.oldpassword}
+                                    style={styles.input} />
+                                <TextInput placeholder="********"
+                                    onChangeText={handleChange('password')}
+                                    onBlur={handleBlur('password')}
+                                    value={values.password}
+                                    placeholderTextColor="#000"
+                                    style={styles.input} />
+                                <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+                                    <Text style={styles.btnTxt}>Update</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </Formik>
+                </View>
+            </ScrollView>
     )
 
 }

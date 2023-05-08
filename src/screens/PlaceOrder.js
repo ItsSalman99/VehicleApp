@@ -8,6 +8,7 @@ import { useDispatch, useStore } from 'react-redux';
 import { Formik } from 'formik';
 import { BASE_URL, getUser } from '../functions';
 import { clearcart } from '../store/actions/actions';
+import { useNavigation } from '@react-navigation/native';
 
 
 const PlaceOrder = ({route}) => {
@@ -17,6 +18,7 @@ const PlaceOrder = ({route}) => {
     const [qtyInput, setqtyInput] = useState(1)
     const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const { name, price, qty, product_id } = route.params;
 
@@ -54,12 +56,12 @@ const PlaceOrder = ({route}) => {
             if(response.data.status == true)
             {
                 ToastAndroid.show('Order Placed Successfully!', ToastAndroid.SHORT)
+                navigation.navigate('BottomTab')
             }
             else{
                 ToastAndroid.show(response.data.msg, ToastAndroid.SHORT)
             }
             setLoading(false);
-            console.log(response.data);
             dispatch(clearcart())
         }).catch((error) => console.log(error.response.data))
 
