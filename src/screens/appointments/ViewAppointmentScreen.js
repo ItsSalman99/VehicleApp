@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { BASE_URL } from '../../functions';
 
 const ViewAppointmentScreen = ({ route }) => {
 
@@ -16,7 +17,7 @@ const ViewAppointmentScreen = ({ route }) => {
             <View style={styles.container2}>
                 <TouchableOpacity style={styles.box}>
                     <View>
-                        <Image source={{ uri: img }} style={{ width: '100%', height: 150, resizeMode: 'center' }} />
+                        <Image source={{ uri: BASE_URL + img }} style={{ width: '100%', height: 150, resizeMode: 'center' }} />
                         <Text style={styles.boxH1}>
                             {title}
                         </Text>

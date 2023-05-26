@@ -22,7 +22,7 @@ const ServiceSlider = () => {
     }
     useEffect(() => {
         getData()
-    }, []);
+    }, [10]);
 
     const onRefresh = () => {
         //Clear old data of the list
@@ -66,7 +66,7 @@ const ServiceSlider = () => {
     );
 
     const renderItem = ({ item }) => (
-        <Item title={item.name} summary={item.summary} price={item.price} img={item.img} description={item.description}
+        <Item id={item.id} title={item.name} summary={item.summary} price={item.price} img={item.img} description={item.description}
             stime={item.available_stime} etime={item.available_etime} sdate={item.start_available_date}
             edate={item.end_available_date} />
     );

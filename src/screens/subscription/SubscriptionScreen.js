@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Line from "../../components/Line";
 import * as Yup from 'yup';
 // import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Formik } from "formik";
 import { useNavigation } from "@react-navigation/native";
+import { getUser } from "../../functions";
 
 
 const SubscriptionScreen = () => {
@@ -16,16 +17,32 @@ const SubscriptionScreen = () => {
             .oneOf([true], "You must accept the terms and conditions")
     });
 
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const check = async () => {
+            const user = await getUser();
+            setUser(user)
+            console.log(user);
+            if (user == null) {
+                console.log('user');
+                navigation.navigate('BottomTab')
+            }
+        }
+        check();
+    }, [10])
+
     return (
         <View style={styles.container}>
             <View style={styles.container1}>
                 <Text style={styles.title}>
-                    Our Monthly Subscription
+                    One Time Subscription
                 </Text>
                 <Text style={styles.text}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat.
+                    Our one time subscription which help you to get rid of advertisements and avail our future benefits.
+                </Text>
+                <Text style={styles.text}>
+                    Easy one time secure payment process to get rid of our ads compaign.
                 </Text>
             </View>
             <View style={styles.container2}>
@@ -35,20 +52,19 @@ const SubscriptionScreen = () => {
                     </Text>
                     <Line />
                     <View style={{ alignItems: 'center', marginTop: 30 }}>
-                        {/* <BouncyCheckbox text='I accept the terms & conditions' size={25}
-                            fillColor="#ddd"
-                            unfillColor="#FFFFFF"
-                            iconStyle={{ borderColor: "black" }}
-                            innerIconStyle={{ borderRadius: 0.8, borderWidth: 2, }}
-                            style={{ marginVertical: 10, padding: 2 }}
-                            value={false}
-                        /> */}
-                        <TouchableOpacity style={styles.btn} onPress={ () => { navigation.navigate('Subscribe') }}>
-                            <Text style={styles.btnTxt}>
-                                Subscribe Now
-                            </Text>
-                        </TouchableOpacity>
+                        {
+                            user.is_sub == 1 ? <TouchableOpacity style={styles.btnsubscribe}>
+                                <Text style={styles.subbtnTxt}>
+                                    SUBSCRIBED
+                                </Text>
+                            </TouchableOpacity>
+                                : <TouchableOpacity style={styles.btn} onPress={() => { navigation.navigate('Subscribe') }}>
+                                    <Text style={styles.btnTxt}>
+                                        Subscribe Now
+                                    </Text>
+                                </TouchableOpacity>
 
+                        }
                     </View>
                 </View>
             </View>
@@ -82,7 +98,9 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        padding: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 10,
         color: '#fff',
     },
     btn: {
@@ -98,7 +116,21 @@ const styles = StyleSheet.create({
     btnTxt: {
         color: '#fff',
         fontSize: 20
-    }
+    },
+    btnsubscribe: {
+        backgroundColor: '#ddd',
+        height: 55,
+        borderRadius: 18,
+        alignItems: 'center',
+        alignContent: 'center',
+        justifyContent: 'center',
+        width: '90%',
+        margin: 10,
+    },
+    subbtnTxt: {
+        color: '#000',
+        fontSize: 20
+    },
 })
 
 export default SubscriptionScreen;

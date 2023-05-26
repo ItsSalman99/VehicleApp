@@ -6,6 +6,8 @@ import Line from '../components/Line';
 import ServiceSlider from '../components/ServicesSlider';
 import ShortcutScreen from '../components/ShortcutScreen';
 import { getUser } from '../functions';
+import AdModal from '../components/ads/AdModal';
+import ShowAds from '../components/ads/ShowAds';
 
 
 const DashBoardScreen = ({ navigation }) => {
@@ -25,6 +27,7 @@ const DashBoardScreen = ({ navigation }) => {
     const store = useStore();
 
     const [user, setUser] = useState([]);
+    const [isLoad, setisLoad] = useState(false);
 
     useEffect(() => {
         const check = async () => {
@@ -35,8 +38,15 @@ const DashBoardScreen = ({ navigation }) => {
                 navigation.navigate('BottomTab')
             }
         }
+        
         check();
+        const timer = setTimeout(() => {
+            setisLoad(true)
+        }, 10000)
+        return () => clearTimeout(timer);
     }, [10])
+
+
 
     return (
         <ScrollView
@@ -45,7 +55,7 @@ const DashBoardScreen = ({ navigation }) => {
             style={styles.container}>
             <View style={styles.container1}>
                 <Text style={styles.toptext} numberOfLines={1}>
-                    Hello ,{ user.name }
+                    Hello ,{user.name}
                 </Text>
                 <Text style={styles.topmsg}>
                     Welcome to your dashboard!
@@ -53,8 +63,13 @@ const DashBoardScreen = ({ navigation }) => {
             </View>
             <View style={styles.container}>
                 <ImageSlider isLoad={true} />
-                <ShortcutScreen/>
-                <Line/>
+                <Line />
+                <ShortcutScreen />
+                {
+                    user.is_sub == 0 ? 
+                    <ShowAds/>
+                    : ''
+                }
                 <ServiceSlider />
             </View>
         </ScrollView>

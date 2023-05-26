@@ -28,6 +28,7 @@ import PollDetailScreen from '../screens/PollDetailScreen';
 import SubscriptionForm from '../screens/subscription/SubscriptionForm';
 import PlaceOrder from '../screens/PlaceOrder';
 import GetReward from '../screens/rewards/GetReward';
+import AppointmentScreen from '../screens/appointments/AppointmentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -260,6 +261,16 @@ const MainNavigation = () => {
             <Stack.Screen name='Subscribe' component={SubscriptionForm} options={{
                 headerShown: true,
                 headerTitle: 'Subscription Form',
+                headerStyle: {
+                    backgroundColor: '#006BFF'
+                },
+                headerTintColor: '#fff',
+                headerShadowVisible: false,
+            }} />
+
+            <Stack.Screen name='AppointService' component={AppointmentScreen} options={{
+                headerShown: true,
+                headerTitle: 'Appoint Service',
                 headerStyle: {
                     backgroundColor: '#006BFF'
                 },

@@ -9,6 +9,7 @@ import { login } from '../store/actions/actions';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native';
 import { BASE_URL, getUser } from '../functions';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LogInScreen = () => {
 
@@ -17,6 +18,13 @@ const LogInScreen = () => {
     const store = useStore();
     const navigation = useNavigation();
     const [isLoading, setLoading] = useState(false);
+
+    const [password, setPassword] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
 
     const LogInSchema = Yup.object().shape({
         email: Yup.string().email('Invalid Email!').required('Please enter your email!'),
@@ -30,7 +38,7 @@ const LogInScreen = () => {
         axios({
             method: 'post',
             responseType: 'json',
-            url: BASE_URL+"api/login",
+            url: BASE_URL + "api/login",
             data: {
                 email,
                 password
@@ -107,10 +115,19 @@ const LogInScreen = () => {
                                             onBlur={handleBlur('password')}
                                             value={values.password}
                                             placeholderTextColor="#0000007a"
+                                            secureTextEntry={!isPasswordVisible}
+
                                         />
-                                        {/* <View style={{ marginVertical: 15 }}>
-                                        <Text style={{ textAlign: 'right' }}>Forget password</Text>
-                                    </View> */}
+                                        <TouchableOpacity
+                                            style={{marginBottom: 10}}
+                                            onPress={togglePasswordVisibility}
+                                        >
+                                            {isPasswordVisible ? (
+                                                <Text>Hide Password</Text>
+                                            ) : (
+                                                <Text>Show Password</Text>
+                                            )}
+                                        </TouchableOpacity>
                                         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
                                             <Text style={styles.btnTxt}>Sign In</Text>
                                         </TouchableOpacity>
@@ -201,7 +218,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
 });
 
 export default LogInScreen;

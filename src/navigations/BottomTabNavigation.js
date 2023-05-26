@@ -52,7 +52,7 @@ const BottomTabNavigation = () => {
                                     {(cart.length > 0) ? <Ionicons name="ios-cart" size={20} style={{ marginRight: 15 }} color="#fff" /> :
                                     <Ionicons name="ios-cart-outline" size={20} style={{ marginRight: 15 }} color="#fff" />}
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigation.navigate('Drawer')}>
+                                <TouchableOpacity >
                                     <MaterialIcons name="history-toggle-off" size={20} style={{ marginRight: 15 }} color="#fff" />
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => navigation.navigate('Drawer')}>

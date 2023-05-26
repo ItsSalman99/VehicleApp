@@ -86,6 +86,7 @@ const AddPoll = () => {
                             onBlur={handleBlur('title')}
                             value={values.title}
                             placeholderTextColor="#000"
+                            color="#000"
                         />
                         {errors.content && touched.content ? <Text style={{ fontSize: 12, alignSelf: 'flex-start', marginLeft: 15, color: 'red', top: 8 }}>{errors.content}</Text> : null}
                         <TextInput style={styles.formInput2} placeholder="What is on your mind?"
@@ -94,6 +95,7 @@ const AddPoll = () => {
                             value={values.content}
                             placeholderTextColor="#000"
                             multiline={true}
+                            color="#000"
                         />
                         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
                             <Text style={styles.btnTxt}>

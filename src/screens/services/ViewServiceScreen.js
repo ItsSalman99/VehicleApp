@@ -18,6 +18,7 @@ const ViewServiceScreen = ({ route, navigation }) => {
     const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
+        console.log(sid);
         const check = async () => {
             const user = await getUser();
             setUser(user)
@@ -102,7 +103,12 @@ const ViewServiceScreen = ({ route, navigation }) => {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        Appoint()
+                                        navigation.navigate('AppointService', {
+                                            sid: sid,
+                                            name: name,
+                                            description: description,
+                                            price: price 
+                                        })
                                     }}
                                     style={styles.btn}>
                                     <View style={{ flexDirection: 'row' }}>

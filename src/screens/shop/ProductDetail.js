@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, ToastAndroid } from 'react-native';
 import { View, StyleSheet, Image, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch, useStore } from 'react-redux';
 import { BASE_URL, getUser } from '../../functions';
 import { addtocart } from '../../store/actions/actions';
+import Line from '../../components/Line';
 
 const ProductDetail = ({ route, navigation }) => {
 
@@ -11,17 +12,27 @@ const ProductDetail = ({ route, navigation }) => {
 
     const store = useStore();
     const dispatch = useDispatch();
+    
+    const [user, setUser] = useState([]);
+
+    useEffect(() => {
+        const check = async () => {
+            const user = await getUser();
+            setUser(user)
+        }
+        check();
+    }, [navigation])
 
     const AddToCart = async () => {
 
-        const cart = [{
-            'user_id': await getUser().id,
+        const cart = {
+            'user_id': user.id,
             'product_id': prodId,
             'name': name,
             'img': img,
             'price': price,
             'qty': 1
-        }]
+        }
 
         dispatch(addtocart(cart))
 
@@ -55,11 +66,12 @@ const ProductDetail = ({ route, navigation }) => {
                 <Text style={{ color: '#000', fontSize: 28 }}>
                     {name}
                 </Text>
-                <Text style={{ color: '#000', fontSize: 20, marginTop: 10, marginRight: 10 }}>
+            </View>
+            <Line />
+            <View style={{ padding: 10 }}>
+                <Text style={{ color: '#000', fontSize: 20 }}>
                     Rs{price} Pkr
                 </Text>
-            </View>
-            <View style={{ padding: 10 }}>
                 <Text style={{ color: '#000', fontSize: 18 }}>
                     Summary:
                 </Text>

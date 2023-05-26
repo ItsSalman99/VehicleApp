@@ -41,7 +41,7 @@ const PollDetailScreen = ({ route }) => {
                             </View>
                         </View>
                         <View style={{ marginTop: 20 }}>
-                            <TextInput style={{ borderWidth: 0.5, borderRadius: 10, padding: 5 }} placeholder="Comment" />
+                            <TextInput style={{ borderWidth: 0.5, borderRadius: 10, padding: 5, color:"#000" }} placeholder="Comment" />
                         </View>
                     </View>
                 </TouchableOpacity>

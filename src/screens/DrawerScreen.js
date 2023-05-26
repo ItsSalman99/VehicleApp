@@ -56,18 +56,18 @@ const DrawerScreen = () => {
                         <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Shop</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ padding: 10, marginHorizontal: 20 }}>
+                {/* <View style={{ padding: 10, marginHorizontal: 20 }}>
                     <TouchableOpacity onPress={() => { navigation.navigate('MyAppointments') }} style={{ flexDirection: 'row' }}>
                     <MaterialIcons name="history-toggle-off" size={20} color="#fff" />
                         <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>My Orders</Text>
                     </TouchableOpacity>
-                </View>
-                <View style={{ padding: 10, marginHorizontal: 20 }}>
+                </View> */}
+                {/* <View style={{ padding: 10, marginHorizontal: 20 }}>
                     <TouchableOpacity onPress={() => { navigation.navigate('Vehicles') }} style={{ flexDirection: 'row' }}>
                         <AntDesign name="car" size={20} color="#fff" />
                         <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Vehicles</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 <View style={{ padding: 10, marginHorizontal: 20 }}>
                     <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => navigation.navigate('Estimation')}>
                         <Entypo name="price-tag" size={20} color="#fff" />
