@@ -29,9 +29,10 @@ import SubscriptionForm from '../screens/subscription/SubscriptionForm';
 import PlaceOrder from '../screens/PlaceOrder';
 import GetReward from '../screens/rewards/GetReward';
 import AppointmentScreen from '../screens/appointments/AppointmentScreen';
+import GetFuel from '../screens/fuel/GetFuel';
+
 
 const Stack = createNativeStackNavigator();
-
 
 const MainNavigation = () => {
 
@@ -195,7 +196,7 @@ const MainNavigation = () => {
             }} />
             <Stack.Screen name='Rewards' component={RewardScreen} options={{
                 headerShown: true,
-                headerTitle: 'Spin Wheel',
+                headerTitle: 'Get Rewards',
                 headerStyle: {
                     backgroundColor: '#fff'
                 },
@@ -215,6 +216,15 @@ const MainNavigation = () => {
             <Stack.Screen name='FuelScreen' component={FuelScreen} options={{
                 headerShown: true,
                 headerTitle: 'Get Fuel',
+                headerStyle: {
+                    backgroundColor: '#006BFF'
+                },
+                headerTintColor: '#fff',
+                headerShadowVisible: false,
+            }} />
+            <Stack.Screen name='GetFuel' component={GetFuel} options={{
+                headerShown: true,
+                headerTitle: 'Request Fuel',
                 headerStyle: {
                     backgroundColor: '#006BFF'
                 },

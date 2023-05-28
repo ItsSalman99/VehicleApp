@@ -5,15 +5,18 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { BASE_URL } from '../functions';
+import { BASE_URL, getUser } from '../functions';
+import ShowAds from '../components/ads/ShowAds';
 
 const PollScreen = ({ navigation }) => {
 
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
+    const [user, setUser] = useState([]);
+
     const getData = () => {
-        fetch(BASE_URL+'api/poll/getAll')
+        fetch(BASE_URL + 'api/poll/getAll')
             .then((response) => response.json())
             .then((json) => setData(json.data))
             .catch((error) => console.error(error))
@@ -22,6 +25,12 @@ const PollScreen = ({ navigation }) => {
 
     useEffect(() => {
         getData()
+        const check = async () => {
+            const user = await getUser();
+            setUser(user)
+        }
+
+        check()
     }, []);
 
     const onRefresh = () => {
@@ -33,7 +42,7 @@ const PollScreen = ({ navigation }) => {
 
     const Vote = async (id) => {
         console.log(id);
-        fetch(BASE_URL+'api/poll/upVote/' + id)
+        fetch(BASE_URL + 'api/poll/upVote/' + id)
             .then((response) => response.json())
             .then((json) => {
                 Alert.alert(
@@ -59,12 +68,12 @@ const PollScreen = ({ navigation }) => {
                 })
             }}>
                 <FontAwesome name="user-circle-o" size={25} color="dodgerblue" />
-                <Text style={{color:'#000'}}> Posted By {user} </Text>
+                <Text style={{ color: '#000' }}> Posted By {user} </Text>
             </TouchableOpacity>
-            <Text style={{ color: '#000',fontSize: 26, marginBottom: 5 }}>
+            <Text style={{ color: '#000', fontSize: 26, marginBottom: 5 }}>
                 {title}
             </Text>
-            <Text style={{ color: '#000',fontSize: 16 }}>
+            <Text style={{ color: '#000', fontSize: 16 }}>
                 {para}
             </Text>
             {/* <View style={{alignItems: 'center'}}>
@@ -102,7 +111,7 @@ const PollScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.input}
                             onPress={() => { navigation.navigate('AddPoll') }}
                         >
-                            <Text style={{color: '#000',}}>What do you want to ask or share?</Text>
+                            <Text style={{ color: '#000', }}>What do you want to ask or share?</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

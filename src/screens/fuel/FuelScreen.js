@@ -9,7 +9,7 @@ const FuelScreen = ({ navigation }) => {
     const [data, setData] = useState([]);
 
     const getData = () => {
-        fetch(BASE_URL+'api/fuel/getAll')
+        fetch(BASE_URL + 'api/fuel/getAll')
             .then((response) => response.json())
             .then((json) => setData(json.fuels))
             .catch((error) => console.error(error))
@@ -27,8 +27,14 @@ const FuelScreen = ({ navigation }) => {
         getData();
     };
 
-    const Item = ({ id, title, price, img, description, stime, etime, sdate, edate }) => (
-        <TouchableOpacity style={styles.box}>
+    const Item = ({ id, title, price }) => (
+        <TouchableOpacity style={styles.box} onPress={() => {
+            navigation.navigate('GetFuel', {
+                id: id,
+                name: title,
+                price: price
+            })
+        }}>
             <View>
                 <Text style={styles.boxH1}>
                     {title}

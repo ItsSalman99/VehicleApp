@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, Alert, ToastAndroid, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, TextInput, Alert, ToastAndroid, ActivityIndicator, ScrollView } from 'react-native';
 // import BouncyCheckbox from "react-native-bouncy-checkbox";
 import axios from 'axios';
 import * as Yup from 'yup';
@@ -52,7 +52,7 @@ const RegisterScreen = ({ navigation, route }) => {
                     type: usertype
                 });
             } else if (res.data.status == false) {
-                ToastAndroid.show('Something went wrong!!', ToastAndroid.SHORT)
+                ToastAndroid.show(res.data.message, ToastAndroid.SHORT)
             }
             setLoading(false)
         }).catch((e) => {
@@ -65,72 +65,74 @@ const RegisterScreen = ({ navigation, route }) => {
         (isLoading == true) ? <View style={styles.loading}>
             <ActivityIndicator size="large" />
         </View> :
-            <View style={{ backgroundColor: '#fff', height: '100%' }}>
+            <ScrollView style={{ backgroundColor: '#fff', height: '100%' }}>
+
                 <View style={styles.header}>
                     <Text style={styles.toptext}>Sign Up</Text>
                     <Text style={styles.topmsg}>Create a new account to access the features!</Text>
 
-                    <View style={styles.form}>
-                        <Formik initialValues={{ fullname: '', email: '', password: '', cpassword: '', terms: false }}
-                            validationSchema={RegistterSchema}
-                            onSubmit={(values, { resetForm }) => {
-                                registerUser(values.fullname, values.email, values.password, type)
-                                resetForm({ values: '' })
-                            }}
-                        >
-                            {({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
-                                <View>
-                                    {errors.fullname && touched.fullname ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.fullname}</Text> : null}
-                                    <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Full Name"
-                                        onChangeText={handleChange('fullname')}
-                                        onBlur={handleBlur('fullname')}
-                                        value={values.fullname}
-                                    />
-                                    {errors.email && touched.email ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.email}</Text> : null}
-                                    <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Email"
-                                        onChangeText={handleChange('email')}
-                                        onBlur={handleBlur('email')}
-                                        value={values.email}
-                                    />
-                                    {errors.password && touched.password ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.password}</Text> : null}
-                                    <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Password"
-                                        onChangeText={handleChange('password')}
-                                        onBlur={handleBlur('password')}
-                                        value={values.password}
-                                        secureTextEntry={!isPasswordVisible}
-                                    />
-                                    {errors.cpassword && touched.cpassword ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.cpassword}</Text> : null}
-                                    <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Confirm Password"
-                                        onChangeText={handleChange('cpassword')}
-                                        onBlur={handleBlur('cpassword')}
-                                        value={values.cpassword}
-                                        secureTextEntry={!isPasswordVisible}
-                                    />
-                                    {errors.terms && touched.terms ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.terms}</Text> : null}
-
-                                    <TouchableOpacity
-                                        style={{ marginBottom: 10 }}
-                                        onPress={togglePasswordVisibility}
-                                    >
-                                        {isPasswordVisible ? (
-                                            <Text>Hide Password</Text>
-                                        ) : (
-                                            <Text>Show Password</Text>
-                                        )}
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-                                        <Text style={styles.btnTxt}>Sign Up</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { navigation.navigate('Login') }} style={{ marginVertical: 50, textAlign: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: 'dodgerblue' }}>Already have an account!</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                        </Formik>
-                    </View>
 
                 </View>
-            </View>
+                <View style={styles.form}>
+                    <Formik initialValues={{ fullname: '', email: '', password: '', cpassword: '', terms: false }}
+                        validationSchema={RegistterSchema}
+                        onSubmit={(values, { resetForm }) => {
+                            registerUser(values.fullname, values.email, values.password, type)
+                            
+                        }}
+                    >
+                        {({ handleChange, handleBlur, handleSubmit, errors, touched, values }) => (
+                            <View>
+                                {errors.fullname && touched.fullname ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.fullname}</Text> : null}
+                                <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Full Name"
+                                    onChangeText={handleChange('fullname')}
+                                    onBlur={handleBlur('fullname')}
+                                    value={values.fullname}
+                                />
+                                {errors.email && touched.email ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.email}</Text> : null}
+                                <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Email"
+                                    onChangeText={handleChange('email')}
+                                    onBlur={handleBlur('email')}
+                                    value={values.email}
+                                />
+                                {errors.password && touched.password ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.password}</Text> : null}
+                                <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Password"
+                                    onChangeText={handleChange('password')}
+                                    onBlur={handleBlur('password')}
+                                    value={values.password}
+                                    secureTextEntry={!isPasswordVisible}
+                                />
+                                {errors.cpassword && touched.cpassword ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.cpassword}</Text> : null}
+                                <TextInput style={styles.formInput} placeholderTextColor="#000" placeholder="Confirm Password"
+                                    onChangeText={handleChange('cpassword')}
+                                    onBlur={handleBlur('cpassword')}
+                                    value={values.cpassword}
+                                    secureTextEntry={!isPasswordVisible}
+                                />
+                                {errors.terms && touched.terms ? <Text style={{ fontSize: 12, color: 'red', top: 8 }}>{errors.terms}</Text> : null}
+
+                                <TouchableOpacity
+                                    style={{ marginBottom: 10 }}
+                                    onPress={togglePasswordVisibility}
+                                >
+                                    {isPasswordVisible ? (
+                                        <Text>Hide Password</Text>
+                                    ) : (
+                                        <Text>Show Password</Text>
+                                    )}
+                                </TouchableOpacity>
+                                
+                                <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
+                                    <Text style={styles.btnTxt}>Sign Up</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => { navigation.navigate('Login') }} style={{ marginVertical: 50, textAlign: 'center', alignItems: 'center' }}>
+                                    <Text style={{ color: 'dodgerblue' }}>Already have an account!</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </Formik>
+                </View>
+            </ScrollView>
     );
 }
 
@@ -138,13 +140,14 @@ const styles = StyleSheet.create({
     header: {
         height: 220,
         backgroundColor: '#006BFF',
-        borderRadius: 20,
+        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 10,
     },
     toptext: {
         color: '#fff',
         position: 'absolute',
         width: 200,
-        top: 80,
+        top: 50,
         left: 20,
         fontSize: 45,
         fontWeight: 'normal',
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
     },
     topmsg: {
         color: '#fff',
-        top: 150,
+        top: 130,
         left: 20,
         fontSize: 20,
         fontWeight: 'normal',
@@ -164,10 +167,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     form: {
-        position: 'absolute',
-        top: 230,
-        width: '100%',
-        height: '100%',
         alignItems: 'center',
         backgroundColor: '#fff',
     },

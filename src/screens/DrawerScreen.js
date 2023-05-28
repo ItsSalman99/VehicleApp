@@ -9,6 +9,22 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useStore } from 'react-redux';
 import { logout } from '../store/actions/actions';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Linking } from 'react-native';
+import { BASE_URL } from '../functions';
+
+const openPrivacyLink = () => {
+    const privacyLink = BASE_URL + 'privacy-policy';
+
+    Linking.openURL(privacyLink)
+        .catch((err) => console.error('An error occurred', err));
+};
+const openTermsLink = () => {
+    const termsLink = BASE_URL + 'terms-conditions';
+
+    Linking.openURL(termsLink)
+        .catch((err) => console.error('An error occurred', err));
+};
+
 
 const DrawerScreen = () => {
 
@@ -86,6 +102,22 @@ const DrawerScreen = () => {
                     }}>
                         <MaterialCommunityIcons name="gas-station" size={20} color="#fff" />
                         <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Get Fuel</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ padding: 10, marginHorizontal: 20 }}>
+                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => {
+                        openTermsLink()
+                    }}>
+                        <MaterialCommunityIcons name="comment-question" size={20} color="#fff" />
+                        <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Terms & Conditions</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ padding: 10, marginHorizontal: 20 }}>
+                    <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => {
+                        openPrivacyLink()
+                    }}>
+                        <MaterialCommunityIcons name="lock-minus" size={20} color="#fff" />
+                        <Text style={{ color: '#fff', fontSize: 20, marginLeft: 10 }}>Privacy Policy</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ padding: 10, marginHorizontal: 20 }}>

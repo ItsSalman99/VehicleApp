@@ -27,7 +27,6 @@ const DashBoardScreen = ({ navigation }) => {
     const store = useStore();
 
     const [user, setUser] = useState([]);
-    const [isLoad, setisLoad] = useState(false);
 
     useEffect(() => {
         const check = async () => {
@@ -40,10 +39,6 @@ const DashBoardScreen = ({ navigation }) => {
         }
         
         check();
-        const timer = setTimeout(() => {
-            setisLoad(true)
-        }, 10000)
-        return () => clearTimeout(timer);
     }, [10])
 
 

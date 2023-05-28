@@ -5,6 +5,7 @@ import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,
 import axios from 'axios';
 import { useStore } from 'react-redux';
 import { BASE_URL, getUser } from '../functions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
 
@@ -20,6 +21,22 @@ const ProfileScreen = () => {
         check();
         // console.log(data);
     }, [10]);
+
+    const updateData = async (id) => {
+        try {
+            let response = await fetch(
+                BASE_URL + 'api/getLoggedIn/user/' + id
+            );
+            let json = await response.json();
+            // console.log(json.data);
+
+            await AsyncStorage.setItem('user', JSON.stringify(json.data));
+            await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
+            setUser(json.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const updateProfile = (name, email, oldpassword, password) => {
         // console.log(id);
@@ -53,9 +70,8 @@ const ProfileScreen = () => {
             }
             else if (res.data.status == 200) {
                 setLoading(false);
-                setName(res.data.user.name);
-                setEmail(res.data.user.email);
-                updateData(name, email);
+                var id = user.id; 
+                updateData(id);
                 Alert.alert(
                     "Profile Updated",
                     res.data.message,
@@ -84,12 +100,6 @@ const ProfileScreen = () => {
                             <Text style={{ fontSize: 23, color: '#fff' }}>
                                 {user.name}!
                             </Text>
-                        </View>
-                        <View style={{ padding: 20 }}>
-                            <Image
-                                style={{ width: 80, height: 80, resizeMode: 'stretch' }}
-                                source={require('../assets/avatar.png')}
-                            />
                         </View>
                     </View>
                 </View>
